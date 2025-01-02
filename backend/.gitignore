@@ -1,0 +1,5 @@
+.env
+./serviceAccountKey.json
+/node_modules
+config/myconfig.json
+serviceAccountKey.json
