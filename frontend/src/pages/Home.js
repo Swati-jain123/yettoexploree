@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import bannerimg from "../img/sreehari-devadas-Asnwfq5mQ3w-unsplash 1.png";
 import roundsearch from "../img/round-search.png";
 import Slideshow from "../component/Slideshow.js";
@@ -12,22 +12,54 @@ import Cloud from "../img/cloudmountain2 1.png";
 import NewsletterSignup from "../component/Newsletter.js";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Importing styles
+
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 function Home() {
+  const images = [
+    bannerimg,
+    "https://i.pinimg.com/originals/ea/b0/ac/eab0ac3c083a6d1840151d387ed5fdf0.jpg",
+    "https://i0.wp.com/senecaesg.com/wp-content/uploads/2024/12/sen-news-website-2024-12-30T172408.351.png?fit=1366%2C768&ssl=1",
+    "https://wallpapers.com/images/hd/1366x768-travel-background-n2kfanmacwly1rrb.jpg",
+    "https://wallpapers.com/images/hd/1366x768-travel-background-86e38ppqpeor4b8s.jpg",
+  ];
+
   const [startDate, setStartDate] = useState(new Date()); // "Check In" date
   const [endDate, setEndDate] = useState(new Date()); // "Check Out" date
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Automatically move the slider every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 2000); // 3000ms = 3 seconds
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, [images.length]);
+
   return (
     <div className="flex flex-col overflow-hidden ">
       <main className="flex-grow relative">
-        <div className="relative">
-          {/* Banner Image with lowered brightness */}
+        <div className="relative mx-auto w-full h-[70vh] sm:h-auto md:h-[100vh] lg:h-[691px] overflow-hidden">
           <img
-            src={bannerimg}
-            alt="Banner"
-            className="mx-auto w-full h-[70vh] sm:h-auto md:h-[100vh] lg:h-full object-cover"
+            src={images[currentIndex]}
+            alt={`Slide ${currentIndex + 1}`}
+            className="w-full h-full object-cover transition-opacity duration-500 ease-in-out"
             style={{
               filter: "brightness(70%)",
             }}
           />
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+            {images.map((_, index) => (
+              <div
+                key={index}
+                className={`w-3 h-3 rounded-full ${
+                  currentIndex === index ? "bg-white" : "bg-gray-400"
+                }`}
+                onClick={() => setCurrentIndex(index)}
+              />
+            ))}
+          </div>
 
           {/* Overlay text content */}
           <div
